@@ -984,7 +984,7 @@ public class Character extends AbstractCharacterObject {
                 return false;
             }
         }
-        return getIdByName(name) < 0 && Pattern.compile("[a-zA-Z0-9]{3,12}").matcher(name).matches();
+        return getIdByName(name) < 0 && Pattern.compile("[a-zA-Z0-9\\u4e00-\\u9fa5]{3,12}").matcher(name).matches();
     }
 
     public boolean canDoor() {

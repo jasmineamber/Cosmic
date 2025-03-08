@@ -21,6 +21,10 @@
 */
 package tools;
 
+import constants.string.CharsetConstants;
+
+import java.nio.charset.Charset;
+
 public class StringUtil {
     /**
      * Gets a string padded from the left to <code>length</code> by
@@ -32,12 +36,7 @@ public class StringUtil {
      * @return The padded string.
      */
     public static String getLeftPaddedStr(String in, char padchar, int length) {
-        StringBuilder builder = new StringBuilder(length);
-        for (int x = in.length(); x < length; x++) {
-            builder.append(padchar);
-        }
-        builder.append(in);
-        return builder.toString();
+        return String.valueOf(padchar).repeat(Math.max(0, length - in.getBytes(CharsetConstants.CHARSET).length)) + in;
     }
 
     /**
@@ -50,11 +49,7 @@ public class StringUtil {
      * @return The padded string.
      */
     public static String getRightPaddedStr(String in, char padchar, int length) {
-        StringBuilder builder = new StringBuilder(in);
-        for (int x = in.length(); x < length; x++) {
-            builder.append(padchar);
-        }
-        return builder.toString();
+        return in + String.valueOf(padchar).repeat(Math.max(0, length - in.getBytes(CharsetConstants.CHARSET).length));
     }
 
     /**

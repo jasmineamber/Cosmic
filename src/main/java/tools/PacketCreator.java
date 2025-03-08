@@ -303,7 +303,7 @@ public class PacketCreator {
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
-            short pos = (byte) (item.getPosition() * -1);
+            short pos = (short) (item.getPosition() * -1);
             if (pos < 100 && myEquip.get(pos) == null) {
                 myEquip.put(pos, item.getItemId());
             } else if (pos > 100 && pos != 111) { // don't ask. o.o
@@ -2518,6 +2518,16 @@ public class PacketCreator {
         return p;
     }
 
+    public static Packet legendarySpiritCannotScroll(int chr) { // suggested by teto
+        OutPacket p = OutPacket.create(SendOpcode.SHOW_SCROLL_EFFECT);
+        p.writeInt(chr);
+        p.writeByte(-1); // CUIEnchantDlg::SetResult => CUtilDlg::Notice("You cannot use a Scroll with this item.");
+        p.writeBool(false);
+        p.writeBool(true); // bEnchantSkill
+        p.writeBool(false);
+        return p;
+    }
+
     public static Packet removePlayerFromMap(int chrId) {
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_PLAYER_FROM_MAP);
         p.writeInt(chrId);
@@ -3840,7 +3850,7 @@ public class PacketCreator {
             p.writeInt(partychar.getId());
         }
         for (PartyCharacter partychar : partymembers) {
-            p.writeFixedString(getRightPaddedStr(partychar.getName(), '\0', 13));
+            p.writeFixedString(StringUtil.getRightPaddedStr(partychar.getName(), '\0', 13));
         }
         for (PartyCharacter partychar : partymembers) {
             p.writeInt(partychar.getJobId());
@@ -4109,10 +4119,10 @@ public class PacketCreator {
         for (BuddylistEntry buddy : buddylist) {
             if (buddy.isVisible()) {
                 p.writeInt(buddy.getCharacterId()); // cid
-                p.writeFixedString(getRightPaddedStr(buddy.getName(), '\0', 13));
+                p.writeFixedString(StringUtil.getRightPaddedStr(buddy.getName(), '\0', 13));
                 p.writeByte(0); // opposite status
                 p.writeInt(buddy.getChannel() - 1);
-                p.writeFixedString(getRightPaddedStr(buddy.getGroup(), '\0', 13));
+                p.writeFixedString(StringUtil.getRightPaddedStr(buddy.getGroup(), '\0', 13));
                 p.writeInt(0);//mapid?
             }
         }
@@ -4134,7 +4144,7 @@ public class PacketCreator {
         p.writeInt(chrIdFrom);
         p.writeString(nameFrom);
         p.writeInt(chrIdFrom);
-        p.writeFixedString(getRightPaddedStr(nameFrom, '\0', 11));
+        p.writeFixedString(StringUtil.getRightPaddedStr(nameFrom, '\0', 11));
         p.writeByte(0x09);
         p.writeByte(0xf0);
         p.writeByte(0x01);
@@ -6745,14 +6755,6 @@ public class PacketCreator {
         return p;
     }
 
-    private static String getRightPaddedStr(String in, char padchar, int length) {
-        StringBuilder builder = new StringBuilder(in);
-        for (int x = in.length(); x < length; x++) {
-            builder.append(padchar);
-        }
-        return builder.toString();
-    }
-
     public static Packet MobDamageMobFriendly(Monster mob, int damage, int remainingHp) {
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_MONSTER);
         p.writeInt(mob.getObjectId());
@@ -6775,7 +6777,7 @@ public class PacketCreator {
         p.writeShort(chr.getCrushRings().size());
         for (Ring ring : chr.getCrushRings()) {
             p.writeInt(ring.getPartnerChrId());
-            p.writeFixedString(getRightPaddedStr(ring.getPartnerName(), '\0', 13));
+            p.writeFixedString(StringUtil.getRightPaddedStr(ring.getPartnerName(), '\0', 13));
             p.writeInt(ring.getRingId());
             p.writeInt(0);
             p.writeInt(ring.getPartnerRingId());
@@ -6784,7 +6786,7 @@ public class PacketCreator {
         p.writeShort(chr.getFriendshipRings().size());
         for (Ring ring : chr.getFriendshipRings()) {
             p.writeInt(ring.getPartnerChrId());
-            p.writeFixedString(getRightPaddedStr(ring.getPartnerName(), '\0', 13));
+            p.writeFixedString(StringUtil.getRightPaddedStr(ring.getPartnerName(), '\0', 13));
             p.writeInt(ring.getRingId());
             p.writeInt(0);
             p.writeInt(ring.getPartnerRingId());

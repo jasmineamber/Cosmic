@@ -71,7 +71,7 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public void writeString(String value) {
-        byte[] bytes = value.getBytes(CharsetConstants.CHARSET);
+        byte[] bytes = value == null ? new byte[0] : value.getBytes(CharsetConstants.CHARSET);
         writeShort(bytes.length);
         writeBytes(bytes);
     }
