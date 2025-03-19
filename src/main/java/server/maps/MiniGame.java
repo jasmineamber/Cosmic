@@ -28,6 +28,7 @@ import net.server.Server;
 import tools.PacketCreator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -195,7 +196,7 @@ public class MiniGame extends AbstractMapObject {
 
     private void minigameMatchFinished() {
         updateMiniGameBox();
-
+        Arrays.fill(piece, 0);
         if (ownerquit) {
             owner.closeMiniGame(true);
         } else if (visitorquit) {
