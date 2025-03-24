@@ -120,7 +120,7 @@ public class InventoryManipulator {
                             c.sendPacket(PacketCreator.getShowInventoryFull());
                             return false;
                         }
-                        if (owner != null) {
+                        if (owner != null && !InventoryType.SETUP.equals(type)) {
                             nItem.setOwner(owner);
                         }
                         c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(0, nItem))));
