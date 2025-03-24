@@ -98,13 +98,17 @@ public class ItemDropCommand extends Command {
         }
 
         Item toDrop;
-        if (ItemConstants.getInventoryType(itemId) == InventoryType.EQUIP) {
+        InventoryType type = ItemConstants.getInventoryType(itemId);
+        if (InventoryType.EQUIP.equals(type)) {
             toDrop = ii.getEquipById(itemId);
         } else {
             toDrop = new Item(itemId, (short) 0, quantity);
         }
 
-        toDrop.setOwner(player.getName());
+        if (!InventoryType.SETUP.equals(type)) {
+            toDrop.setOwner(player.getName());
+        }
+
         if (player.gmLevel() < 3) {
             short f = toDrop.getFlag();
             f |= ItemConstants.ACCOUNT_SHARING;
