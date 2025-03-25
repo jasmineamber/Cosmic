@@ -97,7 +97,7 @@ public class Fishing {
                     if (chr.canHold(itemId)) {
                         chr.getAbstractPlayerInteraction().gainItem(itemId, true);
                     } else {
-                        chr.showHint("Couldn't catch a(n) #r" + ItemInformationProvider.getInstance().getName(itemId) + "#k due to #e#b" + ItemConstants.getInventoryType(itemid) + "#k#n inventory limit.");
+                        chr.showHint("Couldn't catch a(n) #r" + ItemInformationProvider.getInstance().getName(itemId) + "#k due to #e#b" + ItemConstants.getInventoryType(itemId) + "#k#n inventory limit.");
                     }
                     break;
             }

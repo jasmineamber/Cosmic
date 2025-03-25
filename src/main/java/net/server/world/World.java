@@ -2086,7 +2086,6 @@ public class World {
     public void registerFisherPlayer(Character chr, int baitLevel) {
         synchronized (fishingAttempters) {
             if (fishingAttempters.containsKey(chr)) return;
-            System.out.println(chr.getName() + "正在釣魚了");
             fishingAttempters.put(chr, baitLevel);
         }
     }
@@ -2094,7 +2093,6 @@ public class World {
     public void unregisterFisherPlayer(Character chr) {
         synchronized (fishingAttempters) {
             if (!fishingAttempters.containsKey(chr)) return;
-            System.out.println(chr.getName() + "取消釣魚了");
             fishingAttempters.remove(chr);
         }
     }
