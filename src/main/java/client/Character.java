@@ -7509,11 +7509,14 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void unsitChairInternal() {
-        int chairId = chair.get();
+        int chairId = getChair();
         if (chairId >= 0) {
             setChair(-1);
             if (unregisterChairBuff()) {
                 getMap().broadcastMessage(this, PacketCreator.cancelForeignChairSkillEffect(this.getId()), false);
+            }
+            if (ItemConstants.isFishingChair(chairId)) {
+                getWorldServer().unregisterFisherPlayer(this);
             }
             getMap().broadcastMessage(this, PacketCreator.showChair(this.getId(), 0), false);
         }
@@ -7523,13 +7526,16 @@ public class Character extends AbstractCharacterObject {
     public void sitChair(int itemId) {
         if (this.isLoggedinWorld()) {
             if (itemId >= 1000000) {    // sit on item chair
-                if (chair.get() < 0) {
+                if (getChair() < 0) {
                     setChair(itemId);
+                    if (ItemConstants.isFishingChair(itemId)) {
+                        getWorldServer().registerFisherPlayer(this, 20);
+                    }
                     getMap().broadcastMessage(this, PacketCreator.showChair(this.getId(), itemId), false);
                 }
                 sendPacket(PacketCreator.enableActions());
             } else if (itemId >= 0) {    // sit on map chair
-                if (chair.get() < 0) {
+                if (getChair() < 0) {
                     setChair(itemId);
                     if (registerChairBuff()) {
                         getMap().broadcastMessage(this, PacketCreator.giveForeignChairSkillEffect(this.getId()), false);

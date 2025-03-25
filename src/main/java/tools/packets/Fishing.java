@@ -42,7 +42,7 @@ public class Fishing {
         return 50.0 + 7.0 * (7.0 * Math.sin(x)) * (Math.cos(Math.pow(x, 0.777)));
     }
 
-    public static double[] fetchFishingLikelihood() {
+    private static double[] fetchFishingLikelihood() {
         Calendar calendar = Calendar.getInstance();
         int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
         int hours = calendar.get(Calendar.HOUR);
@@ -63,10 +63,11 @@ public class Fishing {
         return (0.23 * yearLikelihood) + (0.77 * timeLikelihood) + (baitLikelihood) > 57.777;
     }
 
-    public static void doFishing(Character chr, int baitLevel, double yearLikelihood, double timeLikelihood) {
+    public static void doFishing(Character chr, int baitLevel) {
         // thanks Fadi, Vcoc for suggesting a custom fishing system
 
         if (!chr.isLoggedinWorld() || !chr.isAlive()) {
+            chr.getWorldServer().unregisterFisherPlayer(chr);
             return;
         }
 
@@ -76,35 +77,30 @@ public class Fishing {
         }
 
         String fishingEffect;
-        if (!hitFishingTime(chr, baitLevel, yearLikelihood, timeLikelihood)) {
+        double[] fishingLikelihoods = fetchFishingLikelihood();
+        if (!hitFishingTime(chr, baitLevel, fishingLikelihoods[0], fishingLikelihoods[1])) {
             fishingEffect = "Effect/BasicEff.img/Catch/Fail";
         } else {
-            String rewardStr = "";
             fishingEffect = "Effect/BasicEff.img/Catch/Success";
             int rand = (int) (3.0 * Math.random());
             switch (rand) {
                 case 0:
                     int mesoAward = (int) (1400.0 * Math.random() + 1201) * chr.getMesoRate() + (15 * chr.getLevel() / 5);
                     chr.gainMeso(mesoAward, true, true, true);
-                    rewardStr = mesoAward + " mesos.";
                     break;
                 case 1:
                     int expAward = (int) (645.0 * Math.random() + 620.0) * chr.getExpRate() + (15 * chr.getLevel() / 4);
                     chr.gainExp(expAward, true, true);
-                    rewardStr = expAward + " EXP.";
                     break;
                 case 2:
-                    int itemid = getRandomItem();
-                    rewardStr = "a(n) " + ItemInformationProvider.getInstance().getName(itemid) + ".";
-                    if (chr.canHold(itemid)) {
-                        chr.getAbstractPlayerInteraction().gainItem(itemid, true);
+                    int itemId = getRandomItem();
+                    if (chr.canHold(itemId)) {
+                        chr.getAbstractPlayerInteraction().gainItem(itemId, true);
                     } else {
-                        chr.showHint("Couldn't catch a(n) #r" + ItemInformationProvider.getInstance().getName(itemid) + "#k due to #e#b" + ItemConstants.getInventoryType(itemid) + "#k#n inventory limit.");
-                        rewardStr += ".. but has goofed up due to full inventory.";
+                        chr.showHint("Couldn't catch a(n) #r" + ItemInformationProvider.getInstance().getName(itemId) + "#k due to #e#b" + ItemConstants.getInventoryType(itemid) + "#k#n inventory limit.");
                     }
                     break;
             }
-            chr.getMap().dropMessage(6, chr.getName() + " found " + rewardStr);
         }
         chr.sendPacket(PacketCreator.showInfo(fishingEffect));
         chr.getMap().broadcastMessage(chr, PacketCreator.showForeignInfo(chr.getId(), fishingEffect), false);

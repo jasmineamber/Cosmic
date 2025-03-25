@@ -30,7 +30,6 @@ import client.Family;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.id.MapId;
-import constants.inventory.ItemConstants;
 import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
@@ -191,6 +190,7 @@ public class World {
     private ScheduledFuture<?> timedMapObjectsSchedule;
     private Lock timedMapObjectLock = new ReentrantLock(true);
 
+    private final Map<Character, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
     private Map<Character, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
 
     private ScheduledFuture<?> charactersSchedule;
@@ -2083,13 +2083,31 @@ public class World {
         }
     }
 
+    public void registerFisherPlayer(Character chr, int baitLevel) {
+        synchronized (fishingAttempters) {
+            if (fishingAttempters.containsKey(chr)) return;
+            System.out.println(chr.getName() + "正在釣魚了");
+            fishingAttempters.put(chr, baitLevel);
+        }
+    }
+
+    public void unregisterFisherPlayer(Character chr) {
+        synchronized (fishingAttempters) {
+            if (!fishingAttempters.containsKey(chr)) return;
+            System.out.println(chr.getName() + "取消釣魚了");
+            fishingAttempters.remove(chr);
+        }
+    }
+
     public void runCheckFishingSchedule() {
-        double[] fishingLikelihoods = Fishing.fetchFishingLikelihood();
-        double yearLikelihood = fishingLikelihoods[0], timeLikelihood = fishingLikelihoods[1];
-        for (Channel ch : getChannels()) {
-            for (Character chr : ch.getPlayerStorage().getAllCharacters()) {
-                if (MapId.isFishingArea(chr.getMapId()) && ItemConstants.isFishingChair(chr.getChair())) {
-                    Fishing.doFishing(chr, 20, yearLikelihood, timeLikelihood);
+        if (!fishingAttempters.isEmpty()) {
+            List<Character> fishingAttemptersList;
+            synchronized (fishingAttempters) {
+                fishingAttemptersList = new ArrayList<>(fishingAttempters.keySet());
+            }
+            for (Character chr : fishingAttemptersList) {
+                if (MapId.isFishingArea(chr.getMapId())) {
+                    Fishing.doFishing(chr, fishingAttempters.get(chr));
                 }
             }
         }
