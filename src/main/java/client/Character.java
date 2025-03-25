@@ -7515,7 +7515,7 @@ public class Character extends AbstractCharacterObject {
             if (unregisterChairBuff()) {
                 getMap().broadcastMessage(this, PacketCreator.cancelForeignChairSkillEffect(this.getId()), false);
             }
-            if (ItemConstants.isFishingChair(chairId)) {
+            if (YamlConfig.config.server.USE_FISHING_SYSTEM && ItemConstants.isFishingChair(chairId)) {
                 getWorldServer().unregisterFisherPlayer(this);
             }
             getMap().broadcastMessage(this, PacketCreator.showChair(this.getId(), 0), false);
@@ -7528,7 +7528,7 @@ public class Character extends AbstractCharacterObject {
             if (itemId >= 1000000) {    // sit on item chair
                 if (getChair() < 0) {
                     setChair(itemId);
-                    if (ItemConstants.isFishingChair(itemId)) {
+                    if (YamlConfig.config.server.USE_FISHING_SYSTEM && ItemConstants.isFishingChair(itemId)) {
                         getWorldServer().registerFisherPlayer(this, 20);
                     }
                     getMap().broadcastMessage(this, PacketCreator.showChair(this.getId(), itemId), false);
