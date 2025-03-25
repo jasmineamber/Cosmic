@@ -29,6 +29,8 @@ import client.Character;
 import client.Family;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.MapId;
+import constants.inventory.ItemConstants;
 import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
@@ -189,7 +191,6 @@ public class World {
     private ScheduledFuture<?> timedMapObjectsSchedule;
     private Lock timedMapObjectLock = new ReentrantLock(true);
 
-    private final Map<Character, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
     private Map<Character, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
 
     private ScheduledFuture<?> charactersSchedule;
@@ -2082,40 +2083,14 @@ public class World {
         }
     }
 
-    public boolean registerFisherPlayer(Character chr, int baitLevel) {
-        synchronized (fishingAttempters) {
-            if (fishingAttempters.containsKey(chr)) {
-                return false;
-            }
-
-            fishingAttempters.put(chr, baitLevel);
-            return true;
-        }
-    }
-
-    public int unregisterFisherPlayer(Character chr) {
-        Integer baitLevel = fishingAttempters.remove(chr);
-        if (baitLevel != null) {
-            return baitLevel;
-        } else {
-            return 0;
-        }
-    }
-
     public void runCheckFishingSchedule() {
         double[] fishingLikelihoods = Fishing.fetchFishingLikelihood();
         double yearLikelihood = fishingLikelihoods[0], timeLikelihood = fishingLikelihoods[1];
-
-        if (!fishingAttempters.isEmpty()) {
-            List<Character> fishingAttemptersList;
-
-            synchronized (fishingAttempters) {
-                fishingAttemptersList = new ArrayList<>(fishingAttempters.keySet());
-            }
-
-            for (Character chr : fishingAttemptersList) {
-                int baitLevel = unregisterFisherPlayer(chr);
-                Fishing.doFishing(chr, baitLevel, yearLikelihood, timeLikelihood);
+        for (Channel ch : getChannels()) {
+            for (Character chr : ch.getPlayerStorage().getAllCharacters()) {
+                if (MapId.isFishingArea(chr.getMapId()) && ItemConstants.isFishingChair(chr.getChair())) {
+                    Fishing.doFishing(chr, 20, yearLikelihood, timeLikelihood);
+                }
             }
         }
     }

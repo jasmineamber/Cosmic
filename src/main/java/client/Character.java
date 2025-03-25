@@ -6180,13 +6180,6 @@ public class Character extends AbstractCharacterObject {
         return guildid > 0 && guildRank < 3;
     }
 
-    public boolean attemptCatchFish(int baitLevel) {
-        return YamlConfig.config.server.USE_FISHING_SYSTEM && MapId.isFishingArea(mapid) &&
-                this.getPosition().getY() > 0 &&
-                ItemConstants.isFishingChair(chair.get()) &&
-                this.getWorldServer().registerFisherPlayer(this, baitLevel);
-    }
-
     public void leaveMap() {
         releaseControlledMonsters();
         visibleMapObjects.clear();
@@ -7516,20 +7509,14 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void unsitChairInternal() {
-        int chairid = chair.get();
-        if (chairid >= 0) {
-            if (ItemConstants.isFishingChair(chairid)) {
-                this.getWorldServer().unregisterFisherPlayer(this);
-            }
-
+        int chairId = chair.get();
+        if (chairId >= 0) {
             setChair(-1);
             if (unregisterChairBuff()) {
                 getMap().broadcastMessage(this, PacketCreator.cancelForeignChairSkillEffect(this.getId()), false);
             }
-
             getMap().broadcastMessage(this, PacketCreator.showChair(this.getId(), 0), false);
         }
-
         sendPacket(PacketCreator.cancelChair(-1));
     }
 

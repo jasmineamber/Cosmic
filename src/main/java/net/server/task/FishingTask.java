@@ -19,6 +19,7 @@
 */
 package net.server.task;
 
+import config.YamlConfig;
 import net.server.world.World;
 
 /**
@@ -28,7 +29,9 @@ public class FishingTask extends BaseTask implements Runnable {
 
     @Override
     public void run() {
-        wserv.runCheckFishingSchedule();
+        if (YamlConfig.config.server.USE_FISHING_SYSTEM) {
+            wserv.runCheckFishingSchedule();
+        }
     }
 
     public FishingTask(World world) {
