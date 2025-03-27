@@ -43,7 +43,7 @@ public class LevelProCommand extends Command {
             levelUp(player, params[0]);
             return;
         }
-        if (c.getGMLevel() == 6 && params.length == 2) {
+        if (player.gmLevel() == 6 && params.length == 2) {
             Character target = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (target == null) {
                 player.message("Player '" + params[0] + "' could not be found.");
