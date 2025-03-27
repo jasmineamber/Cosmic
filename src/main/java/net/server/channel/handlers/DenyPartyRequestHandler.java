@@ -35,12 +35,9 @@ public final class DenyPartyRequestHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();
-        String[] cname = p.readString();
-
-        Character cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(cname[cname.length - 1]);
+        Character cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(p.readString());
         if (cfrom != null) {
             Character chr = c.getPlayer();
-
             if (InviteCoordinator.answerInvite(InviteType.PARTY, chr.getId(), cfrom.getPartyId(), false).result == InviteResultType.DENIED) {
                 chr.updatePartySearchAvailability(chr.getParty() == null);
                 cfrom.sendPacket(PacketCreator.partyStatusMessage(23, chr.getName()));
