@@ -35,7 +35,7 @@ public final class DenyPartyRequestHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();
-        String[] cname = p.readString().split("PS: ");
+        String[] cname = p.readString();
 
         Character cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(cname[cname.length - 1]);
         if (cfrom != null) {

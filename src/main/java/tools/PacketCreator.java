@@ -3802,7 +3802,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
         p.writeByte(4);
         p.writeInt(from.getParty().getId());
-        p.writeString("PS: " + from.getName());
+        p.writeString(from.getName());
         p.writeByte(0);
         return p;
     }
