@@ -39,8 +39,23 @@ public class LevelProCommand extends Command {
             player.yellowMessage("Syntax: !levelpro <newlevel>");
             return;
         }
-        while (player.getLevel() < Math.min(player.getMaxClassLevel(), Integer.parseInt(params[0]))) {
-            player.levelUp(false);
+        if (params.length == 1) {
+            levelUp(player, params[0]);
+            return;
+        }
+        if (c.getGMLevel() == 6 && params.length == 2) {
+            Character target = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+            if (target == null) {
+                player.message("Player '" + params[0] + "' could not be found.");
+            } else {
+                levelUp(target, params[1]);
+            }
+        }
+    }
+
+    private void levelUp(Character chr, String level) {
+        while (chr.getLevel() < Math.min(chr.getMaxClassLevel(), Integer.parseInt(level))) {
+            chr.levelUp(false);
         }
     }
 }
