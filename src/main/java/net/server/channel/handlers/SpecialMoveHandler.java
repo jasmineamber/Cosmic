@@ -118,7 +118,6 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         } else if (skillid == Brawler.MP_RECOVERY) {// MP Recovery
             Skill s = SkillFactory.getSkill(skillid);
             StatEffect ef = s.getEffect(chr.getSkillLevel(s));
-
             int lose = chr.safeAddHP(-1 * (chr.getCurrentMaxHp() / ef.getX()));
             int gain = (int) (-lose * (ef.getY() / 100.0));
             chr.addMP(gain);
