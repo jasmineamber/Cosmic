@@ -32,11 +32,11 @@ public class CharsetConstants {
     public static final Charset CHARSET = loadCharset();
 
     private enum Language {
-        LANGUAGE_TW("Big5"),
+        LANGUAGE_TW("UTF-8"),
         LANGUAGE_US("US-ASCII"),
-        LANGUAGE_PT_BR("ISO-8859-1"),
         LANGUAGE_THAI("TIS620"),
-        LANGUAGE_KOREAN("MS949");
+        LANGUAGE_KOREAN("MS949"),
+        LANGUAGE_PT_BR("ISO-8859-1");
 
         private final String charset;
 
