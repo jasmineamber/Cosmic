@@ -1,7 +1,6 @@
 package config;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
-import constants.string.CharsetConstants;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,8 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-
 public class YamlConfig {
+
     public static final String CONFIG_FILE_NAME = "config.yaml";
     public static final YamlConfig config = loadConfig();
 
