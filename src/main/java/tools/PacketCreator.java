@@ -4144,7 +4144,7 @@ public class PacketCreator {
         p.writeInt(chrIdFrom);
         p.writeString(nameFrom);
         p.writeInt(chrIdFrom);
-        p.writeFixedString(StringUtil.getRightPaddedStr(nameFrom, '\0', 11));
+        p.writeFixedString(StringUtil.getRightPaddedStr(nameFrom, '\0', 13));
         p.writeByte(0x09);
         p.writeByte(0xf0);
         p.writeByte(0x01);
