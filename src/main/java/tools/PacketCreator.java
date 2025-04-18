@@ -1334,10 +1334,9 @@ public class PacketCreator {
      */
     public static Packet gachaponMessage(Item item, String town, Character player) {
         final OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
-        p.writeByte(0x0B);
-        p.writeString(player.getName() + " : got a(n)");
-        p.writeInt(0); //random?
-        p.writeString(town);
+        p.writeByte(6);
+        p.writeString("[" + town + "] " + player.getName() + " : got a(n) " + ItemInformationProvider.getInstance().getName(item.getItemId())); // message
+        p.writeInt(0);
         addItemInfo(p, item, true);
         return p;
     }
