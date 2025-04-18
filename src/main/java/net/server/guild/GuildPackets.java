@@ -541,7 +541,6 @@ public class GuildPackets {
         return p;
     }
 
-
     public static Packet sendShowInfo(int allianceid, int playerid) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x02);

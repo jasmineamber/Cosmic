@@ -44,18 +44,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class GuildOperationHandler extends AbstractPacketHandler {
+
     private static final Logger log = LoggerFactory.getLogger(GuildOperationHandler.class);
 
     private boolean isGuildNameAcceptable(String name) {
-        if (name.length() < 3 || name.length() > 12) {
-            return false;
-        }
-        for (int i = 0; i < name.length(); i++) {
-            if (!java.lang.Character.isLowerCase(name.charAt(i)) && !java.lang.Character.isUpperCase(name.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
+        return name.length() <= 20;
     }
 
     @Override
