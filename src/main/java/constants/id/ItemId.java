@@ -24,6 +24,10 @@ public class ItemId {
         return itemId >= 2022450 && itemId <= 2022452;
     }
 
+    public static boolean isExpBuff(int itemId) {
+        return itemId == 2450000;
+    }
+
     public static boolean isRateCoupon(int itemId) {
         int itemType = itemId / 1000;
         return itemType == 5211 || itemType == 5360;

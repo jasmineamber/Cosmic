@@ -441,6 +441,8 @@ public class StatEffect {
                     ret.cardStats = new CardItemupStats(itemupCode, prob, areas, inParty);
                 } else if (ItemId.isExpIncrease(sourceid)) {
                     addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_INCREASE, DataTool.getInt("expinc", source, 0));
+                } else if (ItemId.isExpBuff(sourceid)) {
+                    addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_BUFF, DataTool.getInt("expBuff", source, 0));
                 }
             } else {
                 if (isMapChair(sourceid)) {
