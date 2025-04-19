@@ -28,6 +28,14 @@ public class ItemId {
         return itemId == 2450000;
     }
 
+    public static boolean isDropBuff(int itemId) {
+        return itemId == 2022462 || itemId == 2022463 || itemId == 2022530 || itemId == 2022531;
+    }
+
+    public static boolean isMesoBuff(int itemId) {
+        return itemId == 2022124 || itemId == 2022459 || itemId == 2022460 || itemId == 2022461 || itemId == 2022529;
+    }
+
     public static boolean isRateCoupon(int itemId) {
         int itemType = itemId / 1000;
         return itemType == 5211 || itemType == 5360;

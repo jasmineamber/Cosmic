@@ -443,6 +443,10 @@ public class StatEffect {
                     addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_INCREASE, DataTool.getInt("expinc", source, 0));
                 } else if (ItemId.isExpBuff(sourceid)) {
                     addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_BUFF, DataTool.getInt("expBuff", source, 0));
+                } else if (ItemId.isMesoBuff(sourceid)){
+                    addBuffStatPairToListIfNotZero(statups, BuffStat.MESO_UP_BY_ITEM, DataTool.getInt("prob", source, 0));
+                } else if (ItemId.isDropBuff(sourceid)){
+                    addBuffStatPairToListIfNotZero(statups, BuffStat.ITEM_UP_BY_ITEM, DataTool.getInt("prob", source, 0));
                 }
             } else {
                 if (isMapChair(sourceid)) {
