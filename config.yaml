@@ -8,7 +8,7 @@ worlds:
     event_message:
     why_am_i_recommended:
     channels: 2
-    exp_rate: 50
+    exp_rate: 20
     meso_rate: 10
     drop_rate: 10
     boss_drop_rate: 20                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
